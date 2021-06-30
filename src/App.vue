@@ -1,28 +1,73 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <Welcom v-if="curerntPage === 0"></Welcom>
+
+    <div v-for="eventIndex in 10" :key="eventIndex">
+      <event
+        v-if="curerntPage === eventIndex"
+        :eventNum="eventIndex"
+        :poemLines="poemLines[eventIndex - 1]"
+        :requirePath="requirePath"
+      ></event>
+    </div>
+
+    <v-bottom-navigation fixed>
+      <v-btn v-if="curerntPage < poemLines.length" @click="advance"> הבא</v-btn>
+      <v-btn v-if="curerntPage > 0" @click="regress">הקודם</v-btn>
+      <v-btn v-if="curerntPage === poemLines.length" @click="startAgain">
+        מהתחלה</v-btn
+      >
+    </v-bottom-navigation>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Welcom from "./views/welcom.vue";
+import event from "./components/event.vue";
+import poem from "./assets/poem.json";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
+  components: { Welcom, event },
+  data() {
+    return {
+      curerntPage: 0,
+      poemLines: poem,
+      requirePath: null,
+    };
+  },
+  computed: {
+    regexString() {
+      return `^.{2}${this.curerntPage}/.+$`;
+    },
+  },
 
+  methods: {
+    advance() {
+      this.curerntPage++;
+    },
+    regress() {
+      this.curerntPage--;
+    },
+    startAgain() {
+      this.curerntPage = 0;
+    },
+  },
+
+  mounted() {
+    this.requirePath = require.context(`./assets/images/`, true, /\.png|jpg$/);
+  },
+};
+</script>
 <style>
+@font-face {
+  font-family: "assistant";
+  src: url("./assets/Assistant-VariableFont_wght.ttf");
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: assistant;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

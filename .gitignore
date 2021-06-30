@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+/src/assets/images
+package-log.json
+
 
 # local env files
 .env.local
