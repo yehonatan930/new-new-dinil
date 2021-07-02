@@ -1,23 +1,16 @@
 <template>
   <v-app>
-    <Welcom v-if="curerntPage === 0"></Welcom>
-
-    <div v-for="eventIndex in 10" :key="eventIndex">
-      <event
-        v-if="curerntPage === eventIndex"
-        :eventNum="eventIndex"
-        :poemLines="poemLines[eventIndex - 1]"
-        :requirePath="requirePath"
-      ></event>
-    </div>
-
-    <v-bottom-navigation fixed>
-      <v-btn v-if="curerntPage < poemLines.length" @click="advance"> הבא</v-btn>
-      <v-btn v-if="curerntPage > 0" @click="regress">הקודם</v-btn>
-      <v-btn v-if="curerntPage === poemLines.length" @click="startAgain">
-        מהתחלה</v-btn
-      >
-    </v-bottom-navigation>
+    <v-carousel hide-delimiters height="100vh">
+      <v-carousel-item v-for="eventIndex in 10" :key="eventIndex">
+        <Welcom v-if="eventIndex === 1"></Welcom>
+        <event
+          v-else
+          :eventNum="eventIndex - 1"
+          :poemLines="poemLines[eventIndex - 2]"
+          :images="imagesByEvent[eventIndex - 1]"
+        ></event>
+      </v-carousel-item>
+    </v-carousel>
   </v-app>
 </template>
 
@@ -26,37 +19,47 @@ import Welcom from "./views/welcom.vue";
 import event from "./components/event.vue";
 import poem from "./assets/poem.json";
 export default {
-  components: { Welcom, event },
+  components: {
+    Welcom,
+    event,
+  },
   data() {
     return {
       curerntPage: 0,
       poemLines: poem,
-      requirePath: null,
+      imagesByEvent: [],
     };
   },
-  computed: {
-    regexString() {
-      return `^.{2}${this.curerntPage}/.+$`;
-    },
-  },
+  computed: {},
 
   methods: {
-    advance() {
-      this.curerntPage++;
-    },
-    regress() {
-      this.curerntPage--;
-    },
-    startAgain() {
-      this.curerntPage = 0;
+    importImages(r) {
+      this.imagesByEvent = [...Array(this.poemLines.length).keys()].map(
+        (index) => {
+          const regex = new RegExp(`^.{2}${index}/.+$`);
+          return r
+            .keys()
+            .filter((key) =>
+              index !== this.poemLines.length ? regex.test(key) : true
+            )
+            .map((key) => r(key));
+        }
+      );
     },
   },
 
   mounted() {
-    this.requirePath = require.context(`./assets/images/`, true, /\.png|jpg$/);
+    const requireFunction = require.context(
+      `./assets/images/`,
+      true,
+      /\.png|jpg$/
+    );
+
+    this.importImages(requireFunction);
   },
 };
 </script>
+
 <style>
 @font-face {
   font-family: "assistant";
@@ -68,6 +71,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #2d3047;
+  background-image: url("./assets/images/back0.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.vgs {
+  width: 50% !important;
+  left: 25% !important;
 }
 </style>
