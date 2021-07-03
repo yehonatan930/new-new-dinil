@@ -10,21 +10,24 @@
       </v-row>
     </v-container>
 
-    <v-row no-gutters id="gallery">
-      <v-col v-for="(image, imageIndex) in images" :key="imageIndex">
-        <img
-          class="image"
-          :src="image"
-          @click="currentImageIndex = imageIndex"
-        />
-      </v-col>
-    </v-row>
+    <div id="gallery">
+      <v-row no-gutters>
+        <v-col v-for="(image, imageIndex) in images" :key="imageIndex">
+          <img
+            class="image"
+            :style="rowHeightStyle"
+            :src="image"
+            @click="currentImageIndex = imageIndex"
+          />
+        </v-col>
+      </v-row>
 
-    <vue-gallery-slideshow
-      :images="images"
-      :index="currentImageIndex"
-      @close="currentImageIndex = null"
-    ></vue-gallery-slideshow>
+      <vue-gallery-slideshow
+        :images="images"
+        :index="currentImageIndex"
+        @close="currentImageIndex = null"
+      ></vue-gallery-slideshow>
+    </div>
   </div>
 </template>
 
@@ -32,6 +35,7 @@
 import VueGallerySlideshow from "vue-gallery-slideshow";
 
 export default {
+  name: "Event",
   props: {
     eventNum: Number,
     poemLines: Array,
@@ -55,6 +59,12 @@ export default {
         return result;
       }, []);
     },
+
+    rowHeightStyle() {
+      const style = {};
+      style.height = this.images.length > 6 ? "30vh" : "50vh";
+      return style;
+    },
   },
 
   methods: {},
@@ -72,9 +82,8 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  border: 2px solid #ebebeb;
+  border: solid #ebebeb;
   width: auto;
-  height: 30vh;
 }
 
 .vgs__container {
