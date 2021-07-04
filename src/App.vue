@@ -1,8 +1,16 @@
 <template>
   <v-app>
     <v-carousel hide-delimiters height="100vh" :continuous="false">
-      <v-carousel-item v-for="eventIndex in 9" :key="eventIndex">
+      <v-carousel-item
+        v-for="eventIndex in poemLines.length + 2"
+        :key="eventIndex"
+        :src="backgroundImages[eventIndex - 1]"
+      >
         <TitlePage :texts="titleTexts[0]" v-if="eventIndex === 1"></TitlePage>
+        <TitlePage
+          :texts="titleTexts[1]"
+          v-else-if="eventIndex === poemLines.length + 2"
+        ></TitlePage>
         <Event
           v-else
           :eventNum="eventIndex - 1"
@@ -25,6 +33,7 @@ export default {
   },
   data() {
     return {
+      backgroundImages: [],
       poemLines: poem,
       imagesByEvent: [],
       titleTexts: [
@@ -62,23 +71,37 @@ export default {
         .sort(() => 0.5 - Math.random())
         .map((path) => r(path));
 
-      console.log(this.poemLines.length);
-
       this.imagesByEvent[this.poemLines.length] = this.imagesByEvent[
         this.poemLines.length
       ].concat(randomPathsBeforeLastEvent);
     },
+
+    importBackgroundImages(r) {
+      const regex = /^.+back\d{2}.+$/;
+      this.backgroundImages = r
+        .keys()
+        .filter((path) => regex.test(path))
+        .map((path) => r(path));
+    },
   },
 
   mounted() {
-    const requireFunction = require.context(
-      `./assets/images/`,
+    const dinilRequireFunction = require.context(
+      `./assets/images/dinil`,
       true,
       /\.png|jpg$/
     );
 
-    this.importImages(requireFunction);
-    this.addImagesToLastEvent(requireFunction);
+    this.importImages(dinilRequireFunction);
+    this.addImagesToLastEvent(dinilRequireFunction);
+
+    const backRequireFunction = require.context(
+      `./assets/images/backs`,
+      true,
+      /\.png|jpg$/
+    );
+
+    this.importBackgroundImages(backRequireFunction);
   },
 };
 </script>
@@ -95,7 +118,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2d3047;
-  background-image: url("./assets/images/backs/back0.jpg");
+  /* background-image: url("./assets/images/backs/back0.jpg"); */
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -104,7 +127,7 @@ export default {
   left: 25% !important;
 }
 
-.v-window {
-  /* overflow-y: scroll !important; */
+.theme--light.v-image {
+  color: #2d3047 !important;
 }
 </style>
