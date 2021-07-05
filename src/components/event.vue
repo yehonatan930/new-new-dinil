@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container class="head-container">
+    <v-container class="head-container" :class="{ 'bright-text': bright }">
       <v-row class="head-row">
         <v-col class="head-col" v-for="(pair, index) in poemPairs" :key="index">
           <h1 class="poem-line" v-for="line in pair" :key="line">
@@ -40,6 +40,7 @@ export default {
     eventNum: Number,
     poemLines: Array,
     images: Array,
+    bright: Boolean,
   },
 
   components: {
@@ -78,6 +79,11 @@ export default {
   direction: rtl;
   max-width: 95vw !important;
 }
+
+.bright-text {
+  color: #d6ffe4;
+}
+
 .image {
   background-size: cover;
   background-repeat: no-repeat;

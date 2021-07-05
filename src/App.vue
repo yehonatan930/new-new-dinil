@@ -16,6 +16,7 @@
           :eventNum="eventIndex - 1"
           :poemLines="poemLines[eventIndex - 2]"
           :images="imagesByEvent[eventIndex - 1]"
+          :bright="eventIndex === 8"
         ></Event>
       </v-carousel-item>
     </v-carousel>
@@ -43,7 +44,7 @@ export default {
         },
         {
           head:
-            "אז דיניל יומולדת 19 שמח, נגמרו החרוזים אנחנו פשוט אוהבים אותך ❤️",
+            "אז דיניל יומולדת 19 שמח, נגמרו החרוזים, אנחנו פשוט אוהבים אותך ❤️",
           sub: "",
         },
       ],
@@ -98,7 +99,7 @@ export default {
     const backRequireFunction = require.context(
       `./assets/images/backs`,
       true,
-      /\.png|jpg$/
+      /\.png|jpg|webp$/
     );
 
     this.importBackgroundImages(backRequireFunction);
