@@ -10,7 +10,7 @@
       </v-row>
     </v-container>
 
-    <div id="gallery">
+    <v-container id="gallery">
       <v-row no-gutters>
         <v-col v-for="(image, imageIndex) in images" :key="imageIndex">
           <img
@@ -21,13 +21,13 @@
           />
         </v-col>
       </v-row>
+    </v-container>
 
-      <vue-gallery-slideshow
-        :images="images"
-        :index="currentImageIndex"
-        @close="currentImageIndex = null"
-      ></vue-gallery-slideshow>
-    </div>
+    <vue-gallery-slideshow
+      :images="images"
+      :index="currentImageIndex"
+      @close="currentImageIndex = null"
+    ></vue-gallery-slideshow>
   </div>
 </template>
 
@@ -78,6 +78,7 @@ export default {
   margin-bottom: 5vh;
   direction: rtl;
   max-width: 95vw !important;
+  height: 30vh;
 }
 
 .bright-text {
@@ -98,5 +99,27 @@ export default {
 
 #gallery {
   margin-top: 10vh;
+  height: 54.8vh;
+  overflow-y: scroll;
+  max-width: 92vw;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #abbfc4;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #93a3a7;
 }
 </style>

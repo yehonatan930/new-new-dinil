@@ -119,13 +119,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2d3047;
-  /* background-image: url("./assets/images/backs/back0.jpg"); */
   background-repeat: no-repeat;
   background-size: cover;
 }
 .vgs {
-  width: 50% !important;
-  left: 25% !important;
+  width: 60% !important;
+  left: 20% !important;
 }
 
 .theme--light.v-image {
